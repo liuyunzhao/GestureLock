@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <TextView
+        android:id="@+id/prompt"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="40px"
+        android:gravity="center"
+        android:textColor="#333"
+        android:textSize="40px"/>
+
+    <com.andrognito.patternlockview.PatternLockView
+        android:id="@+id/pattern_lock_view"
+        android:layout_width="300dp"
+        android:layout_height="300dp"
+        android:layout_gravity="center"
+        app:correctDotStateColor="#FE9D7F"
+        app:correctDotStrokeStateColor="#FFDED4"
+        app:dotAnimationDuration="200"
+        app:dotCount="3"
+        app:dotNormalSize="22dp"
+        app:dotSelectedSize="30dp"
+        app:normalDotStateColor="#888888"
+        app:pathEndAnimationDuration="50"
+        app:pathWidth="10dp"
+        app:correctLineStateColor="#FFDED4"
+        app:wrongLineStateColor="#C9C9C9"
+        app:wrongDotStateColor="#888888"
+        app:wrongDotStrokeStateColor="#C9C9C9"
+        />
+    <Button
+        android:id="@+id/btn1"
+        android:text="隐藏点放大模式"
+        android:layout_marginTop="30px"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
+    <Button
+        android:id="@+id/btn2"
+        android:text="不可用模式"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
+    <Button
+        android:id="@+id/btn3"
+        android:text="换一种形式"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
+    <Button
+        android:id="@+id/btn4"
+        android:text="重置"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
+</LinearLayout>
