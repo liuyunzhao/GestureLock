@@ -1,5 +1,5 @@
-package com.andrognito.patternlockview.listener;
-import com.andrognito.patternlockview.PatternLockView;
+package com.android.patternlockview.listener;
+import com.android.patternlockview.PatternLockView;
 
 import java.util.List;
 

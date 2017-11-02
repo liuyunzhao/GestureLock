@@ -4,9 +4,6 @@
     <color name="colorPrimaryDark">#303F9F</color>
     <color name="colorAccent">#FF4081</color>
 
-    <color name="colc91b21">#c91b21</color>
-    <color name="colorTitleTxt">@android:color/black</color>
-
     <color name="col_888">#888888</color>
     <color name="col_FE9D7F">#FE9D7F</color>
 </resources>

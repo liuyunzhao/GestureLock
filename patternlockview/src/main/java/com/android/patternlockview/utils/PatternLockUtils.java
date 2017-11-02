@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-package com.andrognito.patternlockview.utils;
+package com.android.patternlockview.utils;
 
 import android.animation.Keyframe;
 import android.animation.ObjectAnimator;
@@ -23,7 +23,7 @@ import android.view.HapticFeedbackConstants;
 import android.view.View;
 import android.widget.TextView;
 
-import com.andrognito.patternlockview.PatternLockView;
+import com.android.patternlockview.PatternLockView;
 
 import java.util.List;
 

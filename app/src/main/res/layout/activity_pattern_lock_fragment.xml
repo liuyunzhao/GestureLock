@@ -15,7 +15,7 @@
         android:textColor="#333"
         android:textSize="40px"/>
 
-    <com.andrognito.patternlockview.PatternLockView
+    <com.android.patternlockview.PatternLockView
         android:id="@+id/pattern_lock_view"
         android:layout_width="300dp"
         android:layout_height="300dp"
@@ -27,7 +27,6 @@
         app:dotNormalSize="22dp"
         app:dotSelectedSize="30dp"
         app:normalDotStateColor="#888888"
-        app:pathEndAnimationDuration="50"
         app:pathWidth="10dp"
         app:correctLineStateColor="#FFDED4"
         app:wrongLineStateColor="#C9C9C9"
@@ -48,11 +47,6 @@
     <Button
         android:id="@+id/btn3"
         android:text="换一种形式"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"/>
-    <Button
-        android:id="@+id/btn4"
-        android:text="重置"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"/>
 </LinearLayout>

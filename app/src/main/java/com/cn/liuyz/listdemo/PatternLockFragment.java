@@ -9,12 +9,11 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
-import android.widget.Toast;
 
-import com.andrognito.patternlockview.PatternLockView;
-import com.andrognito.patternlockview.listener.PatternLockViewListener;
-import com.andrognito.patternlockview.utils.PatternLockUtils;
-import com.andrognito.patternlockview.utils.ResourceUtils;
+import com.android.patternlockview.PatternLockView;
+import com.android.patternlockview.listener.PatternLockViewListener;
+import com.android.patternlockview.utils.PatternLockUtils;
+import com.android.patternlockview.utils.ResourceUtils;
 
 import java.util.List;
 
@@ -25,7 +24,7 @@ public class PatternLockFragment extends Fragment {
 
     private PatternLockView mPatternLockView;
     private TextView mPrompt;
-    private Button mBtn1,mBtn2,mBtn3,mBtn4;
+    private Button mBtn1,mBtn2,mBtn3;
     private final static String ENTRANCE = "entrance";
 
     private int mEntrance;
@@ -59,7 +58,6 @@ public class PatternLockFragment extends Fragment {
         mBtn1 = view.findViewById(R.id.btn1);
         mBtn2 = view.findViewById(R.id.btn2);
         mBtn3 = view.findViewById(R.id.btn3);
-        mBtn4 = view.findViewById(R.id.btn4);
     }
 
     private void initData() {
@@ -87,12 +85,6 @@ public class PatternLockFragment extends Fragment {
             @Override
             public void onClick(View v) {
                 clickBtn3();
-            }
-        });
-        mBtn4.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                clickBtn4();
             }
         });
     }
@@ -129,12 +121,6 @@ public class PatternLockFragment extends Fragment {
         mPatternLockView.setWrongLineStateColor(ResourceUtils.getColor(getActivity(), R.color.col_888));
     }
 
-    /**
-     * 重置
-     */
-    private void clickBtn4() {
-        Toast.makeText(getActivity(), "请关闭重新进入", Toast.LENGTH_SHORT).show();
-    }
 
     private PatternLockViewListener mPatternLockViewListener = new PatternLockViewListener() {
 

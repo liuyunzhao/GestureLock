@@ -1,4 +1,4 @@
-package com.andrognito.patternlockview;
+package com.android.patternlockview;
 
 import android.animation.Animator;
 import android.animation.AnimatorListenerAdapter;
@@ -20,18 +20,16 @@ import android.view.View;
 import android.view.animation.AnimationUtils;
 import android.view.animation.Interpolator;
 
-import com.andrognito.patternlockview.listener.PatternLockViewListener;
-import com.andrognito.patternlockview.utils.ResourceUtils;
+import com.android.patternlockview.listener.PatternLockViewListener;
+import com.android.patternlockview.utils.ResourceUtils;
 
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.util.ArrayList;
 import java.util.List;
-
-import static com.andrognito.patternlockview.PatternLockView.PatternViewMode.AUTO_DRAW;
-import static com.andrognito.patternlockview.PatternLockView.PatternViewMode.CORRECT;
-import static com.andrognito.patternlockview.PatternLockView.PatternViewMode.NORMAL;
-import static com.andrognito.patternlockview.PatternLockView.PatternViewMode.WRONG;
+import static com.android.patternlockview.PatternLockView.PatternViewMode.CORRECT;
+import static com.android.patternlockview.PatternLockView.PatternViewMode.NORMAL;
+import static com.android.patternlockview.PatternLockView.PatternViewMode.WRONG;
 
 /**
  * 自定义手势View
@@ -41,22 +39,19 @@ public class PatternLockView extends View {
     /**
      * 模式
      */
-    @IntDef({NORMAL, CORRECT, AUTO_DRAW, WRONG})
+    @IntDef({NORMAL, CORRECT, WRONG})
     @Retention(RetentionPolicy.SOURCE)
     public @interface PatternViewMode {
         //默认状态
         int NORMAL = -1;
         //绘制中状态 绘制正确正确
         int CORRECT = 0;
-        //自动绘制，代码已删除
-        int AUTO_DRAW = 1;
         //错误状态
         int WRONG = 2;
     }
 
     private static final int DEFAULT_PATTERN_DOT_COUNT = 3;//默认点数
-    private static final int DEFAULT_DOT_ANIMATION_DURATION = 190;//点放大缩小时间
-    private static final int DEFAULT_PATH_END_ANIMATION_DURATION = 100;//点与点之间线的连接时间
+    private static final int DEFAULT_DOT_ANIMATION_DURATION = 200;//点放大缩小时间
 
     private DotState[][] mDotStates;//每个点对应的对象
     private int mPatternSize;//点的总数
@@ -75,7 +70,6 @@ public class PatternLockView extends View {
     private int mDotNormalSize;
     private int mDotSelectedSize;
     private int mDotAnimationDuration;
-    private int mPathEndAnimationDuration;
 
     private Paint mDotPaint;//画点的画笔
     private Paint mPathPaint;//点与点的连线
@@ -93,8 +87,6 @@ public class PatternLockView extends View {
     private boolean mInStealthMode = false;//false:正常模式 true：隐藏手势，但点会放大
     private boolean mEnableHapticFeedback = true;//false:不震动  true：震动
     private boolean mPatternInProgress = false;//当开始画的时候，置为true 抬起变为false
-
-    private boolean isSelectDot = false;//false:没选中到点 true:选中到点
 
     private float mViewWidth;
     private float mViewHeight;
@@ -136,8 +128,6 @@ public class PatternLockView extends View {
                     ResourceUtils.getDimensionInPx(getContext(), R.dimen.pattern_lock_dot_selected_size));
             mDotAnimationDuration = typedArray.getInt(R.styleable.PatternLockView_dotAnimationDuration,
                     DEFAULT_DOT_ANIMATION_DURATION);
-            mPathEndAnimationDuration = typedArray.getInt(R.styleable.PatternLockView_pathEndAnimationDuration,
-                    DEFAULT_PATH_END_ANIMATION_DURATION);
         } finally {
             typedArray.recycle();
         }
@@ -237,7 +227,7 @@ public class PatternLockView extends View {
             }
 
             //这里绘制最后一个点和和点连接的线
-            if ((mPatternInProgress || mPatternViewMode == AUTO_DRAW) && anyCircles) {
+            if (mPatternInProgress && anyCircles) {
                 currentPath.rewind();
                 currentPath.moveTo(lastX, lastY);
                 currentPath.lineTo(mInProgressX, mInProgressY);
@@ -304,10 +294,6 @@ public class PatternLockView extends View {
                 handleActionUp(event);
                 return true;
             case MotionEvent.ACTION_MOVE:
-                //第一次按下如果没有选中，则滑动中画到点上不选中
-                if (!isSelectDot) {
-                    return true;
-                }
                 handleActionMove(event);
                 return true;
             case MotionEvent.ACTION_CANCEL:
@@ -326,12 +312,10 @@ public class PatternLockView extends View {
         Dot hitDot = detectAndAddHit(x, y);
         if (hitDot != null) {
             mPatternInProgress = true;
-            isSelectDot = true;
             mPatternViewMode = CORRECT;
             notifyPatternStarted();
         } else {
             mPatternInProgress = false;
-            isSelectDot = false;
             notifyPatternCleared();
         }
         if (hitDot != null) {
@@ -356,10 +340,11 @@ public class PatternLockView extends View {
         Dot hitDot = detectAndAddHit(x, y);
         int patternSize = mPattern.size();
         /**
-         * 前面做了判断，所以当第一次没点击到点上，不会走move，也就不会走到这里
+         * 手指按下时没有选中点，当滑动时，滑动到点上进入此判断语句
          */
         if (hitDot != null && patternSize == 1) {
             mPatternInProgress = true;
+            mPatternViewMode = CORRECT;
             notifyPatternStarted();
         }
 
@@ -574,8 +559,7 @@ public class PatternLockView extends View {
             return mCorrectLineStateColor;
         } else if (mPatternViewMode == WRONG) {
             return mWrongLineStateColor;
-        } else if (mPatternViewMode == CORRECT
-                || mPatternViewMode == AUTO_DRAW) {
+        } else if (mPatternViewMode == CORRECT) {
             return mCorrectLineStateColor;
         } else {
             throw new IllegalStateException("Unknown view mode " + mPatternViewMode);
@@ -590,8 +574,7 @@ public class PatternLockView extends View {
             return mNormalDotStateColor;//这里给默认值
         } else if (mPatternViewMode == WRONG) {
             return mWrongDotStateColor;
-        } else if (mPatternViewMode == CORRECT
-                || mPatternViewMode == AUTO_DRAW) {
+        } else if (mPatternViewMode == CORRECT) {
             return mCorrectDotStateColor;
         } else {
             throw new IllegalStateException("Unknown view mode " + mPatternViewMode);
@@ -606,8 +589,7 @@ public class PatternLockView extends View {
             return mCorrectDotStrokeColor;
         } else if (mPatternViewMode == WRONG) {
             return mWrongDotStrokeStateColor;
-        } else if (mPatternViewMode == CORRECT
-                || mPatternViewMode == AUTO_DRAW) {
+        } else if (mPatternViewMode == CORRECT) {
             return mCorrectDotStrokeColor;
         } else {
             throw new IllegalStateException("Unknown view mode " + mPatternViewMode);
@@ -759,26 +741,12 @@ public class PatternLockView extends View {
         return mDotAnimationDuration;
     }
 
-    public int getPathEndAnimationDuration() {
-        return mPathEndAnimationDuration;
-    }
 
     /**
      * 设置正确 错误点 线的显示颜色
      */
     public void setViewMode(@PatternViewMode int patternViewMode) {
         mPatternViewMode = patternViewMode;
-        if (patternViewMode == AUTO_DRAW) {
-            if (mPattern.size() == 0) {
-                throw new IllegalStateException(
-                        "you must have a pattern to "
-                                + "animate if you want to set the display mode to animate");
-            }
-            final Dot first = mPattern.get(0);
-            mInProgressX = getCenterXForColumn(first.mColumn);
-            mInProgressY = getCenterYForRow(first.mRow);
-            clearPatternDrawLookup();
-        }
         invalidate();
     }
 
@@ -816,8 +784,16 @@ public class PatternLockView extends View {
         mCorrectLineStateColor = correctLineStateColor;
     }
 
+    public void setCorrectDotStrokeColor(@ColorInt int correctDotStrokeColor) {
+        mCorrectDotStrokeColor = correctDotStrokeColor;
+    }
+
     public void setWrongLineStateColor(@ColorInt int wrongLineStateColor) {
         mWrongLineStateColor = wrongLineStateColor;
+    }
+
+    public void setWrongDotStrokeStateColor(@ColorInt int wrongDotStrokeStateColor) {
+        mWrongDotStrokeStateColor = wrongDotStrokeStateColor;
     }
 
     public void setPathWidth(@Dimension int pathWidth) {
@@ -853,10 +829,6 @@ public class PatternLockView extends View {
         invalidate();
     }
 
-    public void setPathEndAnimationDuration(int pathEndAnimationDuration) {
-        mPathEndAnimationDuration = pathEndAnimationDuration;
-    }
-
     /**
      * 设置是否显示隐藏手势
      */
@@ -864,9 +836,14 @@ public class PatternLockView extends View {
         mInStealthMode = inStealthMode;
     }
 
+    /**
+     * 设置是否开启震动
+     * @param tactileFeedbackEnabled
+     */
     public void setTactileFeedbackEnabled(boolean tactileFeedbackEnabled) {
         mEnableHapticFeedback = tactileFeedbackEnabled;
     }
+
 
     /**
      * 禁用任何输入

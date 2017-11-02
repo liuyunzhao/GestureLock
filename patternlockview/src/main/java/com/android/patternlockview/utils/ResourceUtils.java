@@ -14,7 +14,7 @@
  *   limitations under the License.
  */
 
-package com.andrognito.patternlockview.utils;
+package com.android.patternlockview.utils;
 
 import android.content.Context;
 import android.support.annotation.ColorRes;
