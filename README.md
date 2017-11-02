@@ -6,7 +6,8 @@
 ## 使用 ##
 可以下载示例代码,以全面了解使用方法,分步使用如下
 
-第一步
+**第一步**
+
 将PatternLockView放到Xml布局中
 
 ```
@@ -30,14 +31,15 @@
         />  
 ```
 
-第二步
+**第二步**
+
 获取PatternLockView控件并添加手势监听事件
 
 ```
 mPatternLockView =(PatternLockView)findViewById(R.id.pattern_lock_view);
 mPatternLockView.addPatternLockListener(mPatternLockViewListener);  
 ```
-实现监听接口
+**实现监听接口**
 
 ```
 private PatternLockViewListener mPatternLockViewListener = new PatternLockViewListener() {
@@ -65,16 +67,16 @@ private PatternLockViewListener mPatternLockViewListener = new PatternLockViewLi
     };  
 ```
 这样就可以使用了
-当然也可以删除手势监听
+当然您也可以删除手势监听
 
 ```
-mPatternLockView.removePatternLockListener(mPatternLockViewListener)
+mPatternLockView.removePatternLockListener(mPatternLockViewListener);
 ```
 ## 自定义 ##
-除了在Xml中设置属性外，你也可以通过JAVA编程方式更改视图的属性
+除了在Xml中设置属性外，您也可以通过JAVA编程方式更改视图的属性
 
 ```
-		mPatternLockView.setDotCount();
+        mPatternLockView.setDotCount();
         mPatternLockView.setDotNormalSize();
         mPatternLockView.setDotSelectedSize();
 
@@ -93,7 +95,7 @@ mPatternLockView.removePatternLockListener(mPatternLockViewListener)
 
         mPatternLockView.setRingPaint();
 ```
-**请自己实现需要的属性**
+**请您自己实现需要的属性**
 
 ## 贡献 ##
 这个库是从Aritra Roy的PatternLockView获取并添加了一些改进使其更加灵活，如果您发现bug或想改进它的任何方面，可以自由地用拉请求进行贡献。
